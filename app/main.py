@@ -6,11 +6,28 @@ def main():
     print("Logs from your program will appear here!")
 
 
-    server_socket = socket.create_server(("localhost", 4221))
+    server_socket = socket.create_server(("localhost", 4221), reuse_port=False)
     server_socket.accept() # wait for client
-    client_socket, _ = server_socket.accept()  # wait for client
-    client_socket.send("HTTP/1.1 200 OK\r\n\r\n".encode())
-    print(server_socket.accept()) 
+ # Wait for a client connection
+    client_socket, addr = server_socket.accept()
+    print(f"Connection established with {addr}")
+
+    try:
+        # Read data from the client
+        data = client_socket.recv(1024)  # Adjust the buffer size if necessary
+        print(f"Received data: {data.decode()}")
+
+        # Respond with HTTP/1.1 200 OK
+        response = "HTTP/1.1 200 OK\r\n\r\n"
+        client_socket.sendall(response.encode())
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        # Close the client socket
+        client_socket.close()
+        # Close the server socket
+        server_socket.close()
 
 
 if __name__ == "__main__":
