@@ -7,7 +7,6 @@ def main():
 
 
     server_socket = socket.create_server(("localhost", 4221), reuse_port=False)
-    server_socket.accept() # wait for client
  # Wait for a client connection
     client_socket, addr = server_socket.accept()
     print(f"Connection established with {addr}")
